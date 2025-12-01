@@ -28,6 +28,8 @@ workflows:
     scripts:
       - name: Check environment
         script: |
+          cd ITCTKB-ReactNative
+          npm install
           echo "=== Environment Check ==="
           pwd
           echo "--- Files in current directory ---"
@@ -72,7 +74,7 @@ workflows:
             -exportArchive \
             -archivePath $CM_BUILD_DIR/build/ITCTKB.xcarchive \
             -exportPath $CM_BUILD_DIR/build/ios/ipa \
-            -exportOptionsPlist $CM_BUILD_DIR/ios/exportOptions.plist
+            -exportOptionsPlist exportOptions.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
