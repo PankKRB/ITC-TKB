@@ -3,7 +3,6 @@ workflows:
     name: ITC TKB iOS Build
     max_build_duration: 120
     instance_type: mac_mini_m2
-    working_directory: ITCTKB-ReactNative
 
     environment:
       vars:
@@ -30,6 +29,8 @@ workflows:
       - name: Install dependencies
         script: |
           echo "Starting dependency installation..."
+          pwd
+          ls -la
           node --version
           npm --version
           npm install --legacy-peer-deps
