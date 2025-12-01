@@ -24,11 +24,8 @@ workflows:
     scripts:
       - name: Install npm dependencies
         script: |
-          # Xóa cache cũ
-          rm -rf node_modules
-          rm -f package-lock.json
-          
-          # Cài npm dependencies
+          # Cài npm dependencies với cache clean
+          npm cache clean --force
           npm install --legacy-peer-deps
           
       - name: Install Expo CLI
