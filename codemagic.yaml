@@ -4,50 +4,53 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     working_directory: ITCTKB-ReactNative
-    
+
     environment:
       vars:
         XCODE_WORKSPACE: "ios/ITCTKB.xcworkspace"
         XCODE_SCHEME: "ITCTKB"
         BUNDLE_ID: "com.hoangkiet.itctkb"
-      node: 20
+      node: 18
       xcode: latest
       cocoapods: default
-      
+
     triggering:
       events:
         - push
       branch_patterns:
         - pattern: 'main'
           include: true
-          
+
     scripts:
       - name: Install dependencies
         script: |
           # Tăng memory cho Node.js
           export NODE_OPTIONS=--max_old_space_size=4096
-          
+
           # Show versions
           node --version
           npm --version
-          
-          # Install dependencies với legacy peer deps
-          npm install --legacy-peer-deps
-          
+
+          # Xóa cache và node_modules cũ
+          npm cache clean --force
+          rm -rf node_modules package-lock.json
+
+          # Cài dependencies với legacy peer deps và verbose log
+          npm install --legacy-peer-deps --verbose
+
       - name: Install Expo CLI
         script: |
           npm install -g eas-cli @expo/cli
-          
+
       - name: Prebuild Expo project
         script: |
-          # Expo prebuild sẽ tạo folder ios/
           npx expo prebuild --platform ios --clean
-          
+
       - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install --repo-update
-          
+
       - name: Build ipa for distribution (without code signing)
         script: |
           cd ios
@@ -60,17 +63,17 @@ workflows:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
-          
+
           xcodebuild \
             -exportArchive \
             -archivePath $CM_BUILD_DIR/build/ITCTKB.xcarchive \
             -exportPath $CM_BUILD_DIR/build/ios/ipa \
             -exportOptionsPlist $CM_BUILD_DIR/ios/exportOptions.plist
-            
+
     artifacts:
       - build/ios/ipa/*.ipa
       - build/*.xcarchive
-      
+
     publishing:
       email:
         recipients:
