@@ -24,9 +24,12 @@ workflows:
     scripts:
       - name: Install npm dependencies
         script: |
-          # Cài npm dependencies với cache clean
-          npm cache clean --force
-          npm install --legacy-peer-deps
+          # Show node and npm version
+          node --version
+          npm --version
+          
+          # Cài npm dependencies với verbose logging
+          npm install --legacy-peer-deps --verbose
           
       - name: Install Expo CLI
         script: |
