@@ -29,7 +29,7 @@ workflows:
           npm --version
           
           # Install dependencies
-          npm ci || npm install
+          npm install
           
       - name: Install Expo CLI
         script: |
