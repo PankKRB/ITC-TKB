@@ -2,6 +2,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # Expo
 .expo/
@@ -16,12 +17,15 @@ web-build/
 *.key
 *.mobileprovision
 *.orig.*
+ios/
+android/
 
 # Metro
 .metro-health-check*
 
 # Debug
 *.log.*
+*.log
 
 # macOS
 .DS_Store
@@ -29,3 +33,12 @@ web-build/
 # Environment
 .env
 .env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.swp
+*.swo
+*~
