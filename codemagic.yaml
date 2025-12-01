@@ -26,14 +26,21 @@ workflows:
           include: true
 
     scripts:
-      - name: Install dependencies
+      - name: Check environment
         script: |
-          echo "Starting dependency installation..."
+          echo "=== Environment Check ==="
           pwd
+          echo "--- Files in current directory ---"
           ls -la
+          echo "--- Node version ---"
           node --version
+          echo "--- NPM version ---"
           npm --version
-          npm install --legacy-peer-deps
+          echo "--- NPM config ---"
+          npm config list
+          
+      - name: Install dependencies
+        script: npm install --legacy-peer-deps
 
       - name: Install Expo CLI
         script: |
