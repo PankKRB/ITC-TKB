@@ -61,22 +61,7 @@ workflows:
         script: |
           cd ios
           
-          # Create exportOptions.plist if not exists
-          cat > exportOptions.plist <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>development</string>
-              <key>compileBitcode</key>
-              <false/>
-              <key>signingStyle</key>
-              <string>automatic</string>
-          </dict>
-          </plist>
-          EOF
-          
+          # Build archive without code signing
           xcodebuild \
             -workspace ITCTKB.xcworkspace \
             -scheme ITCTKB \
@@ -86,12 +71,14 @@ workflows:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
-
-          xcodebuild \
-            -exportArchive \
-            -archivePath $CM_BUILD_DIR/build/ITCTKB.xcarchive \
-            -exportPath $CM_BUILD_DIR/build/ios/ipa \
-            -exportOptionsPlist exportOptions.plist
+          
+          # Create IPA manually from .app file
+          mkdir -p $CM_BUILD_DIR/build/ios/ipa/Payload
+          cp -r $CM_BUILD_DIR/build/ITCTKB.xcarchive/Products/Applications/ITCTKB.app \
+               $CM_BUILD_DIR/build/ios/ipa/Payload/
+          cd $CM_BUILD_DIR/build/ios/ipa
+          zip -r ITCTKB.ipa Payload
+          rm -rf Payload
 
     artifacts:
       - build/ios/ipa/*.ipa
