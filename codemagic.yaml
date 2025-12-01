@@ -10,9 +10,14 @@ workflows:
         XCODE_WORKSPACE: "ios/ITCTKB.xcworkspace"
         XCODE_SCHEME: "ITCTKB"
         BUNDLE_ID: "com.hoangkiet.itctkb"
-      node: 18
+      node: 20
       xcode: latest
       cocoapods: default
+
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $CM_BUILD_DIR/node_modules
 
     triggering:
       events:
@@ -31,12 +36,8 @@ workflows:
           node --version
           npm --version
 
-          # Xóa cache và node_modules cũ
-          npm cache clean --force
-          rm -rf node_modules package-lock.json
-
-          # Cài dependencies với legacy peer deps và verbose log
-          npm install --legacy-peer-deps --verbose
+          # Cài dependencies với legacy peer deps
+          npm install --legacy-peer-deps
 
       - name: Install Expo CLI
         script: |
