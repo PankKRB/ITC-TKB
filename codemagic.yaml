@@ -24,12 +24,22 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
+          set -e
+          set -x
+          
           # Show versions
           node --version
           npm --version
           
+          # Clean npm cache
+          npm cache clean --force || true
+          
           # Install dependencies
-          npm install
+          npm install --verbose 2>&1 | tee npm-install.log || {
+            echo "npm install failed, showing last 50 lines:"
+            tail -50 npm-install.log
+            exit 1
+          }
           
       - name: Install Expo CLI
         script: |
