@@ -11,7 +11,7 @@ workflows:
         XCODE_SCHEME: "ITCTKB"
         BUNDLE_ID: "com.hoangkiet.itctkb"
       node: 18
-      xcode: 15.1  # Dùng version cụ thể thay vì "latest"
+      xcode: latest # Dùng version cụ thể thay vì "latest"
       cocoapods: default
       
     triggering:
