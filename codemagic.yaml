@@ -1,0 +1,77 @@
+workflows:
+  react-native-ios:
+    name: ITC TKB iOS Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    working_directory: ITCTKB-ReactNative
+    
+    environment:
+      vars:
+        XCODE_WORKSPACE: "ios/ITCTKB.xcworkspace"
+        XCODE_SCHEME: "ITCTKB"
+        BUNDLE_ID: "com.hoangkiet.itctkb"
+      node: 18
+      xcode: 15.1  # Dùng version cụ thể thay vì "latest"
+      cocoapods: default
+      
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          # Xóa cache cũ
+          rm -rf node_modules
+          rm -f package-lock.json
+          
+          # Cài npm dependencies
+          npm install --legacy-peer-deps
+          
+      - name: Install Expo CLI
+        script: |
+          npm install -g eas-cli expo-cli
+          
+      - name: Prebuild Expo project
+        script: |
+          # Expo prebuild sẽ tạo folder ios/
+          npx expo prebuild --platform ios --clean --no-install
+          
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install --repo-update
+          
+      - name: Build ipa for distribution (without code signing)
+        script: |
+          cd ios
+          xcodebuild \
+            -workspace ITCTKB.xcworkspace \
+            -scheme ITCTKB \
+            -configuration Release \
+            -archivePath $CM_BUILD_DIR/build/ITCTKB.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+          
+          xcodebuild \
+            -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/ITCTKB.xcarchive \
+            -exportPath $CM_BUILD_DIR/build/ios/ipa \
+            -exportOptionsPlist $CM_BUILD_DIR/ios/exportOptions.plist
+            
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/*.xcarchive
+      
+    publishing:
+      email:
+        recipients:
+          - hoangkiet@icloud.com
+        notify:
+          success: true
+          failure: true
