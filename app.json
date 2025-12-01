@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "ITC TKB",
+    "slug": "itctkb",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2c3e50"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hoangkiet.itctkb",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Ứng dụng cần truy cập camera để chụp ảnh và quay video",
+        "NSMicrophoneUsageDescription": "Ứng dụng cần truy cập microphone để ghi âm",
+        "NSPhotoLibraryUsageDescription": "Ứng dụng cần truy cập thư viện ảnh để tải lên hình ảnh"
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#2c3e50"
+      },
+      "package": "com.hoangkiet.itctkb",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {},
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#2c3e50"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0f4d0af9-49bd-437a-be68-762ff76e341e"
+      }
+    }
+  }
+}
