@@ -10,8 +10,8 @@ workflows:
         XCODE_WORKSPACE: "ios/ITCTKB.xcworkspace"
         XCODE_SCHEME: "ITCTKB"
         BUNDLE_ID: "com.hoangkiet.itctkb"
-      node: 18
-      xcode: latest # Dùng version cụ thể thay vì "latest"
+      node: 20
+      xcode: latest
       cocoapods: default
       
     triggering:
@@ -22,14 +22,14 @@ workflows:
           include: true
           
     scripts:
-      - name: Install npm dependencies
+      - name: Install dependencies
         script: |
-          # Show node and npm version
+          # Show versions
           node --version
           npm --version
           
-          # Cài npm dependencies với verbose logging
-          npm install --legacy-peer-deps --verbose
+          # Install dependencies
+          npm ci || npm install
           
       - name: Install Expo CLI
         script: |
